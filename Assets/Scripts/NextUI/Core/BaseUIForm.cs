@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace NextUI
 {
-    public class BaseUIForm : Behaviour
+    public class BaseUIForm : MonoBehaviour
     {
         // Current UI type
         // refer to class UIType for more
