@@ -6,6 +6,7 @@ namespace NextUI
 {
     internal class UIType
     {
-
+        public bool isClearReverseChange;
+        public UIFormType uiFT;
     }
 }
