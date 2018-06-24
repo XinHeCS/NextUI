@@ -72,7 +72,7 @@ namespace NextUI
             if (_prefabsDic != null)
             {
 // To be improved ...
-                _prefabsDic.Add("LogIn", @"TestForm\LogIn");
+                _prefabsDic.Add("LogIn", @"UIPrefabs\LogonUIForm");
 // To be improved ...
             }
         }
@@ -98,7 +98,7 @@ namespace NextUI
                 case UIShowMode.General:
                     AddToCurrentShow(uiName, uiForm);
                     break;
-                case UIShowMode.ReserveChange:
+                case UIShowMode.ReverseChange:
                     AddToModuelStack(uiName, uiForm);
                     break;
                 case UIShowMode.HideOther:
@@ -121,13 +121,13 @@ namespace NextUI
             switch (uiForm.CurrrentUIType.showMode)
             {
                 case UIShowMode.General:
-                    // ....
+                    RemoveFromCurrentShow(uiName, uiForm);
                     break;
-                case UIShowMode.ReserveChange:
-                    // ....
+                case UIShowMode.ReverseChange:
+                    RemoveFromModuelStack(uiName, uiForm);
                     break;
                 case UIShowMode.HideOther:
-                    // ....
+                    RemoveFromHideOthers(uiName, uiForm);
                     break;
             }
         }
@@ -274,14 +274,36 @@ namespace NextUI
         }
 
         // Remove the moduel ui form from the moduel stack
-        private void RemoveFromModuelStack(string uiName, BaseUIForm uIForm)
+        private void RemoveFromModuelStack(string uiName, BaseUIForm uiForm)
         {
-            uIForm.Hide();
+            // Only allowed to close the top form of the stack
+            if (_moduelFormsStack.Peek() != uiForm)
+            {
+                return;
+            }
+            uiForm.Hide();
             _moduelFormsStack.Pop();
             if (_moduelFormsStack.Count > 0)
             {
                 var preForm = _moduelFormsStack.Peek();
                 preForm.Redisplay();
+            }
+        }
+
+        // Remove the hide other forms from the qeueu of current show forms
+        private void RemoveFromHideOthers(string uiName, BaseUIForm uiForm)
+        {
+            uiForm.Hide();
+            _showFormsCach.Remove(uiName);
+
+            // Redisplay other forms
+            foreach (BaseUIForm item in _showFormsCach.Values)
+            {
+                item.Redisplay();
+            }
+            foreach (BaseUIForm item in _moduelFormsStack)
+            {
+                item.Redisplay();
             }
         }
 

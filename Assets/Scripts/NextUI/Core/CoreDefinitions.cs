@@ -25,7 +25,7 @@ namespace NextUI
         // Normal display
         General,
         // Reserve change
-        ReserveChange,
+        ReverseChange,
         // Hiden all
         // when in this mode, UI manager will hide all oter UI elements
         HideOther
