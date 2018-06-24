@@ -21,6 +21,9 @@ namespace NextUI
         // All the forms which are shown currently
         private Dictionary<string, BaseUIForm> _showFormsCach;
 
+        // Store the module UIForms
+        private Stack<BaseUIForm> _moduelFormsStack;
+
         // Root of current canvas
         private Transform _currentRootCanvas = null;
 
@@ -50,6 +53,7 @@ namespace NextUI
             _prefabsDic = new Dictionary<string, string>();
             _allFormsCach = new Dictionary<string, BaseUIForm>();
             _showFormsCach = new Dictionary<string, BaseUIForm>();
+            _moduelFormsStack = new Stack<BaseUIForm>();
 
             if (!InitRootCanvas())
             {
@@ -75,7 +79,7 @@ namespace NextUI
 
         public void ShowUIForm(string uiName)
         {
-            BaseUIForm uiForm = LaodUIFormCach(uiName);
+            BaseUIForm uiForm = LoadUIFormCach(uiName);
 
             if (uiForm == null)
             {
@@ -83,17 +87,47 @@ namespace NextUI
                 return;
             }
 
+            if (uiForm.CurrrentUIType.isClearReverseChange)
+            {
+                ClearModuelStack();
+            }
+
             // Display the ui form according to its show mode
             switch (uiForm.CurrrentUIType.showMode)
             {
                 case UIShowMode.General:
-                    AddToCurrentShow(uiName);
+                    AddToCurrentShow(uiName, uiForm);
                     break;
                 case UIShowMode.ReserveChange:
-                    // TODO
+                    AddToModuelStack(uiName, uiForm);
                     break;
                 case UIShowMode.HideOther:
-                    // TODO
+                    AddToHideOthers(uiName, uiForm);
+                    break;
+            }
+        }
+
+        public void CloseUIForm(string uiName)
+        {
+            if (!IsLoaded(uiName))
+            {
+                Debug.LogWarning("Moduel: " + uiName + " unloaded!");
+                return;
+            }
+
+            var uiForm = LoadUIFormCach(uiName);
+
+            // Close the ui form according to it's UIType
+            switch (uiForm.CurrrentUIType.showMode)
+            {
+                case UIShowMode.General:
+                    // ....
+                    break;
+                case UIShowMode.ReserveChange:
+                    // ....
+                    break;
+                case UIShowMode.HideOther:
+                    // ....
                     break;
             }
         }
@@ -103,7 +137,7 @@ namespace NextUI
         private bool InitRootCanvas()
         {
 // To be improved ...
-            var rootCanvas = Resources.Load("NextUI") as GameObject;
+            var rootCanvas = Resources.Load(GlobalConfig.CONFIG_CANVAS) as GameObject;
             var canvasClone = Instantiate<GameObject>(rootCanvas, Vector3.zero, Quaternion.identity);
 // To be improved ...
 
@@ -115,16 +149,16 @@ namespace NextUI
             }
 
             _currentRootCanvas = canvasClone.transform;
-            _currentNormal = _currentRootCanvas.Find("Normal");
-            _currentFixed = _currentRootCanvas.Find("Fixed");
-            _currentPopUp = _currentRootCanvas.Find("PopUp");
-            _UIScripts = _currentRootCanvas.Find("UIScripts");
+            _currentNormal = _currentRootCanvas.Find(GlobalConfig.CONFIG_NORMAL);
+            _currentFixed = _currentRootCanvas.Find(GlobalConfig.CONFIG_FIXED);
+            _currentPopUp = _currentRootCanvas.Find(GlobalConfig.CONFIG_POPUP);
+            _UIScripts = _currentRootCanvas.Find(GlobalConfig.CONFIG_SCRIPT);
 
             return true;
         }
 
         // Load a UI form to the cach according to it's name
-        private BaseUIForm LaodUIFormCach(string uiName)
+        private BaseUIForm LoadUIFormCach(string uiName)
         {
             var uiForm = QueryUIForm(uiName);
             if (uiForm == null)
@@ -152,7 +186,7 @@ namespace NextUI
             // Initalize the cloned prefab according to it's info
             if (cloneUI != null)
             {
-                BaseUIForm baseForm = cloneUI.AddComponent<BaseUIForm>();
+                BaseUIForm baseForm = cloneUI.GetComponent<BaseUIForm>();
                 if (baseForm == null)
                 {
                     Debug.LogError("Config file error!!");
@@ -193,14 +227,65 @@ namespace NextUI
         }
 
         // Add the ui form into the queue of current shown forms
-        private void AddToCurrentShow(string uiName)
+        private void AddToCurrentShow(string uiName, BaseUIForm uiForm)
         {
-            BaseUIForm uiForm = QueryUIForm(uiName);
-
             _showFormsCach.Add(uiName, uiForm);
             uiForm.Display();
         }
-        
+
+        // Add the moduel ui form into the moduel stack
+        private void AddToModuelStack(string uiName, BaseUIForm uIForm)
+        {
+            // Check if there exist ui forms in the stack
+            // and freeze the previous form
+            if (_moduelFormsStack.Count > 0)
+            {
+                BaseUIForm preForm = _moduelFormsStack.Peek();
+                preForm.Freeze();
+            }
+
+            _moduelFormsStack.Push(uIForm);
+            uIForm.Display();
+        }
+
+        // Add the hide other forms into the qeueu of current show forms
+        private void AddToHideOthers(string uiName, BaseUIForm uiForm)
+        {
+            // Hide all the other forms
+            foreach (BaseUIForm item in _allFormsCach.Values)
+            {
+                item.Hide();
+            }
+            foreach (BaseUIForm item in _moduelFormsStack)
+            {
+                item.Hide();
+            }
+
+            // Add current form into the queue of show forms
+            _showFormsCach.Add(uiName, uiForm);
+            uiForm.Display();
+        }
+
+        // Remove the ui form from the queue of current shown forms
+        private void RemoveFromCurrentShow(string uiName, BaseUIForm uiForm)
+        {
+            uiForm.Hide();
+            _showFormsCach.Remove(uiName);
+        }
+
+        // Remove the moduel ui form from the moduel stack
+        private void RemoveFromModuelStack(string uiName, BaseUIForm uIForm)
+        {
+            uIForm.Hide();
+            _moduelFormsStack.Pop();
+            if (_moduelFormsStack.Count > 0)
+            {
+                var preForm = _moduelFormsStack.Peek();
+                preForm.Redisplay();
+            }
+        }
+
+
         // Get the paths of queried ui form
         private string QueryUIFormPath(string uiName)
         {
@@ -229,6 +314,19 @@ namespace NextUI
         private bool IsShown(string uiName)
         {
             return _showFormsCach.ContainsKey(uiName);
+        }
+
+        // Clear the moduel stack
+        private bool ClearModuelStack()
+        {
+            if (_moduelFormsStack != null && _moduelFormsStack.Count >= 1)
+            {
+                _moduelFormsStack.Clear();
+
+                return true;
+            }
+
+            return false;
         }
     }
 }

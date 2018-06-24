@@ -39,4 +39,16 @@ namespace NextUI
         ImPenetrable,
         Pentrate
     }
+
+    public class GlobalConfig
+    {
+        // Main canvas object
+        public const string CONFIG_CANVAS = "NextUI";
+
+        // Root management nodes objects
+        public const string CONFIG_NORMAL = "Normal";
+        public const string CONFIG_FIXED = "Fixed";
+        public const string CONFIG_POPUP = "PopUp";
+        public const string CONFIG_SCRIPT = "UIScripts";
+    }
 }
