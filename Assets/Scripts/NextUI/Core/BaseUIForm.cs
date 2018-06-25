@@ -9,18 +9,18 @@ namespace NextUI
         // Current UI type
         // refer to class UIType for more
         // infomation
-        private UIType _currrentUIType = new UIType();
+        private UIType _currentUIType = new UIType();
 
-        internal UIType CurrrentUIType
+        internal UIType CurrentUIType
         {
             get
             {
-                return _currrentUIType;
+                return _currentUIType;
             }
 
             set
             {
-                _currrentUIType = value;
+                _currentUIType = value;
             }
         }
 
@@ -28,17 +28,29 @@ namespace NextUI
         public virtual void Display()
         {
             gameObject.SetActive(true);
+            if (CurrentUIType.formType == UIFormType.PopUp)
+            {
+                UIMask.GetInstance().SetMask(this);
+            }
         }
 
         // Move this UI node out of the UI stack
         public virtual void Hide()
         {
             gameObject.SetActive(false);
+            if (CurrentUIType.formType == UIFormType.PopUp)
+            {
+                UIMask.GetInstance().CancelMask();
+            }
         }
 
         public virtual void Redisplay()
         {
             gameObject.SetActive(true);
+            if (CurrentUIType.formType == UIFormType.PopUp)
+            {
+                UIMask.GetInstance().SetMask(this);
+            }
         }
 
         // Keep current UI node in the UI stack

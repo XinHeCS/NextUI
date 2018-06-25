@@ -34,8 +34,8 @@ namespace NextUI
     // Transparency of the UI element
     public enum UILuencyType
     {
-        Lucency,
-        Translucence,
+        Luency,
+        Transluency,
         ImPenetrable,
         Pentrate
     }
@@ -50,5 +50,16 @@ namespace NextUI
         public const string CONFIG_FIXED = "Fixed";
         public const string CONFIG_POPUP = "PopUp";
         public const string CONFIG_SCRIPT = "UIScripts";
+
+        // Utility nodes
+        public const string UTILITY_UIMASK = "_UIMaskPanel";
+
+        // Colors
+        public const float COLOR_LUENCY_RGB = 255 / 255F;
+        public const float COLOR_LUENCY_RGB_A = 255 / 255F;
+        public const float COLOR_TRANS_LUENCY_RGB = 220 / 255F;
+        public const float COLOR_TRANS_LUENCY_RGB_A = 50 / 255F;
+        public const float COLOR_IMPENETRABLE_COLOR_RGB = 50 / 255F;
+        public const float COLOR_IMPENETRABLE_COLOR_RGB_A = 200 / 255F;
     }
 }
