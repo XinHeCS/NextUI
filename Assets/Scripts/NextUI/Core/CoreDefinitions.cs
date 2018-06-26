@@ -45,6 +45,9 @@ namespace NextUI
         // Main canvas object
         public const string CONFIG_CANVAS = "NextUI";
 
+        // Config files
+        public const string FILE_UIFORM = "UIFormsConfigInfo";
+
         // Root management nodes objects
         public const string CONFIG_NORMAL = "Normal";
         public const string CONFIG_FIXED = "Fixed";

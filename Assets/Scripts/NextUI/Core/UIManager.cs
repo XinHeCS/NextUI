@@ -69,9 +69,8 @@ namespace NextUI
             // Set the default UI prefabs paths
             if (_prefabsDic != null)
             {
-// To be improved ...
-                _prefabsDic.Add("LogIn", @"UIPrefabs\LogonUIForm");
-// To be improved ...
+                JsonConfigManager configManager = new JsonConfigManager(GlobalConfig.FILE_UIFORM);
+                _prefabsDic = configManager.AppSettings;
             }
         }
 

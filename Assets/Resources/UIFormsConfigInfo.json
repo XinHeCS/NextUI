@@ -1,25 +1,35 @@
 ﻿{
-"ConfigInfo":
-[
-{"Key":"本配置文件说明"},
+  "ConfigInfo": [
 
-{"Key":"LogonUIForm",
-"Value":"UIPrefabs\\LogonUIForm"},
+    {
+      "Key": "LogonUIForm",
+      "Value": "UIPrefabs\\LogonUIForm"
+    },
 
-{"Key":"SelectHeroUIForm",
-"Value":"UIPrefabs\\SelectHeroUIForm"},
+    {
+      "Key": "SelectHeroUIForm",
+      "Value": "UIPrefabs\\SelectHeroUIForm"
+    },
 
-{"Key":"MainCityUIForm",
-"Value":"UIPrefabs\\MainCityUIForm"},
+    {
+      "Key": "MainCityUIForm",
+      "Value": "UIPrefabs\\MainCityUIForm"
+    },
 
-{"Key":"HeroInfoUIForm",
-"Value":"UIPrefabs\\HeroInfoUIForm"},
+    {
+      "Key": "HeroInfoUIForm",
+      "Value": "UIPrefabs\\HeroInfoUIForm"
+    },
 
-{"Key":"MarketUIFrom",
-"Value":"UIPrefabs\\MarketUIFrom"},
+    {
+      "Key": "MarketUIFrom",
+      "Value": "UIPrefabs\\MarketUIFrom"
+    },
 
-{"Key":"PropDetailUIForm",
-"Value":"UIPrefabs\\PropDetailUIForm"}
+    {
+      "Key": "PropDetailUIForm",
+      "Value": "UIPrefabs\\PropDetailUIForm"
+    }
 
-]
+  ]
 }
