@@ -7,7 +7,7 @@ public class TestFramework : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        UIManager.GetInstance().ShowUIForm("LogIn");
+        UIManager.GetInstance().ShowUIForm("LogonUIForm");
 	}
 	
 	// Update is called once per frame

@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.Events;
 
 namespace NextUI
 {
@@ -23,6 +25,8 @@ namespace NextUI
                 _currentUIType = value;
             }
         }
+
+        #region Four status of ui forms
 
         // Some basic methods to control the ui element
         public virtual void Display()
@@ -59,5 +63,52 @@ namespace NextUI
         {
             gameObject.SetActive(true);
         }
+        #endregion
+
+
+        #region Some useful methods
+
+        /// <summary>
+        /// Register events call back functions for child ui forms
+        /// </summary>
+        /// <param name="uiName">Name of child ui form</param>
+        /// <param name="eventType">Event type to regist</param>
+        /// <param name="eventCallback">Callback function</param>
+        protected void RegisterEvent(
+            string uiName, 
+            EventTriggerType eventType, 
+            UnityAction<BaseEventData> eventCallback)
+        {
+            var uiForm = transform.Find(uiName).gameObject;
+            var trigger = uiForm.AddComponent<EventTrigger>();
+            EventTrigger.Entry entry = new EventTrigger.Entry
+            {
+                eventID = eventType
+            };
+            entry.callback.AddListener(eventCallback);
+
+            trigger.triggers.Add(entry);
+        }
+
+        protected void OpenForm(string uiName)
+        {
+            UIManager.GetInstance().ShowUIForm(uiName);
+        }
+
+        protected void CloseForm(string uiName)
+        {
+            UIManager.GetInstance().CloseUIForm(uiName);
+        }
+
+        protected void SendMessage(string messageType, MessageCenter.DelMessageExecute handle)
+        {
+            MessageCenter.SendMessage(messageType, handle);
+        }
+
+        protected void ExecuteMessge(string messageType, MessageData mData)
+        {
+            MessageCenter.ExecuteMessge(messageType, mData);
+        }
+        #endregion
     }
 }

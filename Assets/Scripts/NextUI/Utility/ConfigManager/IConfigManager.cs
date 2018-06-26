@@ -16,14 +16,14 @@ namespace NextUI
 }
 
 
-[SerializeField]
+[System.Serializable]
 internal class KeyValueNode
 {
     public string Key = null;
     public string Value = null;
 }
 
-[SerializeField]
+[System.Serializable]
 internal class KeyValueInfo
 {
     public List<KeyValueNode> ConfigInfo = null;
