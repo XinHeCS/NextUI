@@ -11,6 +11,6 @@ namespace NextUI
         public bool isClearReverseChange = false;
         public UIFormType formType = UIFormType.Normal;
         public UIShowMode showMode = UIShowMode.General;
-        public UILuencyType luencyType = UILuencyType.Lucency;
+        public UILuencyType luencyType = UILuencyType.Luency;
     }
 }

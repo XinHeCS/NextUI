@@ -59,8 +59,6 @@ namespace NextUI
             {
                 Debug.LogError("Initialize error!!");
                 Destroy(this);
-
-                return;
             }
 
             // Add self as a child of UISCripts nodes
@@ -71,9 +69,8 @@ namespace NextUI
             // Set the default UI prefabs paths
             if (_prefabsDic != null)
             {
-// To be improved ...
-                _prefabsDic.Add("LogIn", @"UIPrefabs\LogonUIForm");
-// To be improved ...
+                JsonConfigManager configManager = new JsonConfigManager(GlobalConfig.FILE_UIFORM);
+                _prefabsDic = configManager.AppSettings;
             }
         }
 
@@ -87,13 +84,13 @@ namespace NextUI
                 return;
             }
 
-            if (uiForm.CurrrentUIType.isClearReverseChange)
+            if (uiForm.CurrentUIType.isClearReverseChange)
             {
                 ClearModuelStack();
             }
 
             // Display the ui form according to its show mode
-            switch (uiForm.CurrrentUIType.showMode)
+            switch (uiForm.CurrentUIType.showMode)
             {
                 case UIShowMode.General:
                     AddToCurrentShow(uiName, uiForm);
@@ -118,7 +115,7 @@ namespace NextUI
             var uiForm = LoadUIFormCach(uiName);
 
             // Close the ui form according to it's UIType
-            switch (uiForm.CurrrentUIType.showMode)
+            switch (uiForm.CurrentUIType.showMode)
             {
                 case UIShowMode.General:
                     RemoveFromCurrentShow(uiName, uiForm);
@@ -196,7 +193,7 @@ namespace NextUI
                 }
 
                 // Set the parent of current UIForm
-                switch (baseForm.CurrrentUIType.formType)
+                switch (baseForm.CurrentUIType.formType)
                 {
                     case UIFormType.Normal:
                         cloneUI.transform.SetParent(_currentNormal, false);
